@@ -6,7 +6,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "knex": "knex"
   },
   "license": "MIT",
   "dependencies": {
@@ -20,5 +21,8 @@
     "mocha": "^2.5.3",
     "morgan": "^1.7.0",
     "pg": "^6.0.0"
+  },
+  "engines": {
+    "node": "6.2.1"
   }
 }
