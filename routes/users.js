@@ -23,25 +23,38 @@ router.post('/users', (req, res, next) => {
       .send('Password must not be blank');
   }
 
-  bcrypt.hash(req.body.password, 12, (hashErr, hashed_password) => {
-    if (hashErr) {
-      return next(hashErr);
-    }
+  knex('users')
+    .select(knex.raw('1=1'))
+    .where('email', email)
+    .first()
+    .then((exists) => {
+      if (exists) {
+        return res
+          .status(400)
+          .set('Content-type', 'text/plain')
+          .send('Email already exists');
+      }
 
-    knex('users')
-      .insert({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        hashed_password: hashed_password
-      })
-      .then((users) => {
-        res.sendStatus(200);
-      })
-      .catch((hashErr) => {
-        next(hashErr);
+      bcrypt.hash(req.body.password, 12, (hashErr, hashed_password) => {
+        if (hashErr) {
+          return next(hashErr);
+        }
+
+        return knex('users')
+          .insert({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            hashed_password: hashed_password
+          }, '*')
+          .then((users) => {
+            res.sendStatus(200);
+          })
       });
-  });
+    })
+    .catch((err) => {
+      next
+    });
 });
 
 module.exports = router;
