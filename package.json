@@ -5,6 +5,8 @@
   "scripts": {
     "test": "mocha",
     "knex": "knex",
+    "heroku-postbuild": "knex migrate:latest",
+    "nf": "nf start",
     "nodemon": "nodemon server.js"
   },
   "license": "MIT",
