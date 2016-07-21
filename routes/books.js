@@ -2,7 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const knex = require('../knex')
+const knex = require('../knex');
+const ev = require('express-validation');
+const validations = require('../validations/books');
 
 router.get('/books', (_req, res, next) => {
   knex('books')
@@ -37,7 +39,7 @@ router.get('/books/:id', (req, res, next) => {
     });
 });
 
-router.post('/books', (req, res, next) => {
+router.post('/books', ev(validations.post), (req, res, next) => {
   knex('books')
     .insert(req.body, '*')
     .then((books) => {

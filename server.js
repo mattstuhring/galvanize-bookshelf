@@ -46,16 +46,17 @@ app.use((_req, res) => {
   res.sendStatus(404);
 });
 
-// eslint-disable-next-line max-params
 app.use((err, _req, res, _next) => {
-  // eslint-disable-next-line no-console
+  if (err.status) {
+    return res.status(err.status).send(err);
+  }
+
   console.error(err.stack);
   res.sendStatus(500);
 });
 
 app.listen(port, () => {
   if (process.env.NODE_ENV !== 'test') {
-    // eslint-disable-next-line no-console
     console.log('Listening on port', port);
   }
 });

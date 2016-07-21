@@ -3,6 +3,8 @@
 const express = require('express');
 const router = express.Router();
 const knex = require('../knex');
+const ev = require('express-validation');
+const validations = require('../validations/authors');
 
 router.get('/authors', (_req, res, next) => {
   knex('authors')
@@ -27,7 +29,7 @@ router.get('/authors/:id', (req, res, next) => {
     });
 });
 
-router.post('/authors', (req, res, next) => {
+router.post('/authors', ev(validations.post), (req, res, next) => {
   knex('authors')
     .insert(req.body, '*')
     .then((authors) => {

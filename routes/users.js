@@ -4,8 +4,10 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../knex');
 const bcrypt = require('bcrypt');
+const ev = require('express-validation');
+const validations = require('../validations/users');
 
-router.post('/users', (req, res, next) => {
+router.post('/users', ev(validations.post), (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -53,7 +55,7 @@ router.post('/users', (req, res, next) => {
       });
     })
     .catch((err) => {
-      next
+      next(err);
     });
 });
 

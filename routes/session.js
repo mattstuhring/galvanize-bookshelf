@@ -4,8 +4,10 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../knex');
 const bcrypt = require('bcrypt');
+const ev = require('express-validation');
+const validations = require('../validations/sessions');
 
-router.post('/session', (req, res, next) => {
+router.post('/session', ev(validations.post), (req, res, next) => {
   knex('users')
     .where('email', req.body.email)
     .first()
